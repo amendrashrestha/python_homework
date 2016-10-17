@@ -9,7 +9,7 @@ import Song_Module as module
 def music_player():
     file_path = os.getenv('HOME') + "/lulu_mix_16.csv"
 
-    if not file_path:
+    if not os.path.exists(file_path):
         raise Exception("No file exists at %s." % file_path)
 
     songs = []
