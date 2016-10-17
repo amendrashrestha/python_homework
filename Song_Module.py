@@ -22,14 +22,13 @@ class Song(object):
             raise Exception("A song duration is negative")
 
 # This function convert the song duration into hour, minute and second
+# and returns them
     def pretty_duration(self):
         song_duration = self.duration
 
-        song_time = song_duration
-        # print song_time
-        hour = song_time / 3600
-        minute = (song_time / 60) % 60
-        second = song_time % 60
+        hour = song_duration / 3600
+        minute = (song_duration / 60) % 60
+        second = song_duration % 60
 
         return "%i hours %i minutes %i seconds" %(hour, minute, second)
 
