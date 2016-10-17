@@ -21,7 +21,7 @@ class Song(object):
         if self.duration < 0:
             raise Exception("A song duration is negative")
 
-# This function convert the second's song duration into hour minute and second
+# This function convert the song duration into hour, minute and second
     def pretty_duration(self):
         song_duration = self.duration
 
@@ -36,4 +36,5 @@ class Song(object):
 # This function takes song title and opens youtube page with title search
     def play(self):
         youtube_search_url = "https://www.youtube.com/results?search_query=" + self.title
+        print(youtube_search_url)
         webbrowser.open(youtube_search_url)
