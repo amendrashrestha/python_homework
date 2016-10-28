@@ -1,0 +1,1 @@
+This is a classical hangman paper game.
