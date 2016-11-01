@@ -5,6 +5,8 @@ import time
 
 import utilities as util
 
+"""This is the main class of hang-me-not project"""
+
 class HangMeNot(object):
 
     def __init__(self):
@@ -17,6 +19,7 @@ class HangMeNot(object):
         while self.play_again:
             self.start_game()
 
+# Printig the name of the project
     def print_game_name(self):
         print("**************************************************************************************************")
         time.sleep(0.4)
@@ -36,12 +39,14 @@ class HangMeNot(object):
         time.sleep(0.4)
         print("**************************************************************************************************")
 
+# Starting the game
     def start_game(self):
         self.word_to_guess = self.return_word_to_guess()
         # print("Actual word: " + self.word_to_guess)
         self.hangman_word = " ".join(self.randomize_word_letter(self.word_to_guess))
         self.play_game(self.hangman_word, self.word_to_guess)
 
+# Drawing hangman graphics
     @property
     def draw_hangman(self):
         hangman = [
@@ -55,6 +60,7 @@ class HangMeNot(object):
         ]
         return hangman
 
+# This method choses the random word to guess from the list of words
     def return_word_to_guess(self):
         handle = open("word_list.csv", "rb")
         self.word_dict = {}
@@ -64,6 +70,10 @@ class HangMeNot(object):
             self.word_dict[word_row[0]] = word_row[1].replace("\r","").replace("\n","")
 
         return random.choice(self.word_dict.keys())
+
+# This method is responsible for playing hang-me-not game.
+# This method takes word to guess and the actual word.
+# Here
 
     def play_game(self, word_to_guess, actual_word):
         self.hangman_graphic = self.draw_hangman
@@ -99,6 +109,8 @@ class HangMeNot(object):
                     print("The word to guess was: " + actual_word)
                     self.return_play_again_choice()
 
+# This method checks if the guess made by player exists in the acutal word or not.
+# If it exists it replaces the "_" character in actual word with the guess letter.
     def renew_word_to_guess_list(self, guess, word, actual_word):
         for letter in range(len(actual_word)):
             if actual_word[letter] == guess:
@@ -108,7 +120,8 @@ class HangMeNot(object):
                 letter += 1
         return word
 
-
+# This method checks user input.
+# Inform users to write valid inputs only.
     def return_guess(self, actual_word, guessed_letters):
         while True:
             user_input = raw_input().lower()
@@ -123,6 +136,9 @@ class HangMeNot(object):
             else:
                 return user_input
 
+# This method takes acutal word and replace some of the letter with "_".
+# These "_" are the places where user should guess the letter to complete
+# the actual word. 90% of acutal word is replaced with "_"
     def randomize_word_letter(self, word_to_random):
         list_word = list(word_to_random)
         aux = range(len(word_to_random))
@@ -135,10 +151,16 @@ class HangMeNot(object):
             number_to_replace -= 1
         return list_word
 
+# This method returns the hint of the actual word.
+# If user wishes to get hint by press 1.
     def get_hint(self, word):
         word_hint = self.word_dict.get(word)
         print("Hint: " + word_hint)
 
+# Once the game is completed. This method takes the user's choice if
+# he/she wants to play the game again. If yes it will restart the game
+# with welcome message. If the user doesn't want to replay the game
+# the game exists with Have a nice day message.
     def return_play_again_choice(self):
         choice = raw_input("\nWould you like to play again? [Y/N]\n>")
 
@@ -150,11 +172,16 @@ class HangMeNot(object):
             print("Welcome back %s" %self.player_name.username)
             self.start_game()
 
+"""This is the player class of hang-me-not project.
+A user can create his profile and continue to play the game.
+If the username already exists in the system, the player is made
+aware of it and suggested to choose another unique username."""
 
 class UserProfile(object):
     def __init__(self):
         self.username = self.get_username
 
+#Getting username of the player and storing in the file
     @property
     def get_username(self):
         player_file_path = "player_names.txt"
@@ -170,6 +197,7 @@ class UserProfile(object):
 
         return self.player_name
 
+#Checks if username already exists.
     def check_player_name(self, name, file_path):
         self.player_name = name.lower()
 
