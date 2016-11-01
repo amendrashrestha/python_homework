@@ -8,7 +8,7 @@ import utilities as util
 class HangMeNot(object):
 
     def __init__(self):
-        # self.print_game_name()
+        self.print_game_name()
         self.play_again = True
 
         self.player_name = UserProfile()
