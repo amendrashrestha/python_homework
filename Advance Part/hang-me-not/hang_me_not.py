@@ -8,7 +8,7 @@ import utilities as util
 class HangMeNot(object):
 
     def __init__(self):
-        self.print_game_name()
+        # self.print_game_name()
         self.play_again = True
 
         self.player_name = UserProfile()
@@ -38,7 +38,9 @@ class HangMeNot(object):
 
     def start_game(self):
         self.word_to_guess = self.return_word_to_guess()
-        self.play_game(self.word_to_guess)
+        # print("Actual word: " + self.word_to_guess)
+        self.hangman_word = " ".join(self.randomize_word_letter(self.word_to_guess))
+        self.play_game(self.hangman_word, self.word_to_guess)
 
     @property
     def draw_hangman(self):
@@ -63,36 +65,71 @@ class HangMeNot(object):
 
         return random.choice(self.word_dict.keys())
 
-    def play_game(self, word_to_guess):
-        user_input = raw_input()
+    def play_game(self, word_to_guess, actual_word):
+        self.hangman_graphic = self.draw_hangman
+        guessed_letters = ""
+        wrong_guesses = 0
+        hangman_size = len(self.hangman_graphic)
+        word_list = list(word_to_guess.replace(" ",""))
 
-        if user_input == "1":
-            self.get_hint(word_to_guess)
-        else:
-            print("Playing game!!!")
-            self.hangman_graphic = self.draw_hangman
+        while wrong_guesses < hangman_size:
+            print("Word to guess: " + " ".join(word_to_guess))
+            print("Letters guessed: " + guessed_letters)
 
-            guessed_letters = []
+            if "_" not in word_to_guess:
+                print("Congratulations!!! You won!")
+                self.return_play_again_choice()
 
-            word = " ".join(self.randomize_word_letter(word_to_guess))
-            print(word)
+            guess = self.return_guess(actual_word, guessed_letters)
 
-            if user_input in word:
-                pass
+            if guess in actual_word:
+                print("Correct guess!!!")
+                word_to_guess = self.renew_word_to_guess_list(guess, word_list, actual_word)
+                guessed_letters += guess + " "
+            else:
+                guessed_letters += guess + " "
+                print(self.hangman_graphic[wrong_guesses])
+                wrong_guesses += 1
 
-            player_attempts = len(self.hangman_graphic) - 1
+                guess_remaining = hangman_size - wrong_guesses
+                print("Wrong Guess. You have %i guesses remaining !!!" % guess_remaining)
 
-            print(self.hangman_graphic[6])
+                if wrong_guesses == hangman_size:
+                    print("Sorry, you lost the game!")
+                    print("The word to guess was: " + actual_word)
+                    self.return_play_again_choice()
 
-            self.return_play_again_choice()
+    def renew_word_to_guess_list(self, guess, word, actual_word):
+        for letter in range(len(actual_word)):
+            if actual_word[letter] == guess:
+                word[letter] = guess
+                letter += 1
+            else:
+                letter += 1
+        return word
+
+
+    def return_guess(self, actual_word, guessed_letters):
+        while True:
+            user_input = raw_input().lower()
+            if len(user_input) != 1:
+                print("Please enter only one character!")
+            elif user_input == "1":
+                self.get_hint(actual_word)
+            elif user_input in guessed_letters:
+                print("The letter is already used!")
+            elif user_input not in "abcdefghijklmnopqrstuvwxyz1":
+                print("Please enter either character or 1!")
+            else:
+                return user_input
 
     def randomize_word_letter(self, word_to_random):
         list_word = list(word_to_random)
         aux = range(len(word_to_random))
 
-        number_to_replace = int(0.7 * len(list_word))
+        number_to_replace = int(0.9 * len(list_word))
 
-        while number_to_replace > 0:
+        while number_to_replace >= 0:
             posit = random.randrange(len(aux))
             list_word[posit] = "_"
             number_to_replace -= 1
@@ -106,10 +143,11 @@ class HangMeNot(object):
         choice = raw_input("\nWould you like to play again? [Y/N]\n>")
 
         if choice.lower() not in 'y':
-            print("Have a nice day " + self.player_name.username + "!!!")
+            print("Have a nice day %s !!!" %self.player_name.username)
             self.play_again = False
+            quit()
         else:
-            print("Playing again!!")
+            print("Welcome back %s" %self.player_name.username)
             self.start_game()
 
 
