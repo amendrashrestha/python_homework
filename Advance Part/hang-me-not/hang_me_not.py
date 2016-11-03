@@ -1,7 +1,10 @@
+#!/usr/bin python
+
 __author__ = 'amendrashrestha'
 
 import random
 import time
+import sys
 
 import utilities as util
 
@@ -73,7 +76,6 @@ class HangMeNot(object):
 
 # This method is responsible for playing hang-me-not game.
 # This method takes word to guess and the actual word.
-# Here
 
     def play_game(self, word_to_guess, actual_word):
         self.hangman_graphic = self.draw_hangman
@@ -167,7 +169,7 @@ class HangMeNot(object):
         if choice.lower() not in 'y':
             print("Have a nice day %s !!!" %self.player_name.username)
             self.play_again = False
-            quit()
+            sys.exit()
         else:
             print("Welcome back %s" %self.player_name.username)
             self.start_game()
